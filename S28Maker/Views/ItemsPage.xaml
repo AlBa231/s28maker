@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="S28Maker.Views.ItemsPage"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:S28Maker.ViewModels"  
+             xmlns:model="clr-namespace:S28Maker.Models"
+             xmlns:components="clr-namespace:S28Maker.Components;assembly=S28Maker"
+             x:DataType="local:FillS28FormsModel"
+             x:Name="BrowseItemsPage">
+
+    <ContentPage.ToolbarItems>
+        
+        <ToolbarItem x:Name="btnPrevMonth" Text="◀" Command="{Binding PrevMonthCommand}" />
+        <ToolbarItem x:Name="btnNextMonth" Text="▶" Command="{Binding NextMonthCommand}" />
+        <ToolbarItem x:Name="btnShare" Text="Share" Command="{Binding ShareCommand}" />
+    </ContentPage.ToolbarItems>
+    <!--
+      x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+      https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <RefreshView x:DataType="local:FillS28FormsModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <components:BookDataControl></components:BookDataControl>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>
