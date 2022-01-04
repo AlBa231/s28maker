@@ -14,14 +14,10 @@ namespace S28Maker.ViewModels
     public class FillS28FormsModel : BaseViewModel
     {
         private readonly S28MonthItem _month;
-        private Item _selectedItem;
 
         public ObservableCollection<Item> Items { get; }
         public Command LoadItemsCommand { get; }
         public Command ShareCommand { get; }
-        public Command PrevMonthCommand { get; }
-        public Command NextMonthCommand { get; }
-        public Command<Item> ItemTapped { get; }
 
         public event EventHandler ToolbarUpdateRequired;
         
@@ -32,8 +28,6 @@ namespace S28Maker.ViewModels
             Items = new ObservableCollection<Item>();
             IsBusy = true;
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            ItemTapped = new Command<Item>(OnItemSelected);
             
             ShareCommand = new Command(async () =>
             {
@@ -47,23 +41,9 @@ namespace S28Maker.ViewModels
                     File = new ShareFile(S28Document.NewFileName)
                 });
             });
-
-            PrevMonthCommand = new Command(() => ChangeMonth(-1));
-            NextMonthCommand = new Command(() => ChangeMonth(1));
             IsBusy = false;
         }
-
-        private void ChangeMonth(int increment)
-        {
-            if (S28Document.Current == null) return;
-
-            //var month = S28Document.Current.Month + increment;
-            //if (month < 0) month = 11;
-            //if (month > 11) month = 0;
-            //S28Document.Current.Month = month;
-            //OnToolbarUpdateRequired();
-        }
-
+        
         async Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
@@ -91,34 +71,8 @@ namespace S28Maker.ViewModels
         public void OnAppearing()
         {
             IsBusy = true;
-            SelectedItem = null;
-
-        }
-
-        public Item SelectedItem
-        {
-            get => _selectedItem;
-            set
-            {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
-            }
         }
         
-        //private async void OnAddItem(object obj)
-        //{
-        //    await Shell.Current.GoToAsync(nameof(NewItemPage));
-        //}
-
-        async void OnItemSelected(Item item)
-        {
-            if (item == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
-        }
-
         protected virtual void OnToolbarUpdateRequired()
         {
             ToolbarUpdateRequired?.Invoke(this, EventArgs.Empty);
