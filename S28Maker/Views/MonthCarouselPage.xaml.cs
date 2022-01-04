@@ -17,19 +17,15 @@ namespace S28Maker.Views
     public partial class MonthCarouselPage : CarouselPage
     {
         public string MonthName => ((S28MonthItem) SelectedItem)?.Name;
-        private MonthCarouselViewModel _viewModel;
-        
+
         public MonthCarouselPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new MonthCarouselViewModel();
+            BindingContext = new MonthCarouselViewModel();
             ItemsSource = S28MonthItem.All;
+            SelectedItem = S28MonthItem.Current;
         }
-
-        private void MonthCarouselPage_OnPagesChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-        }
-
+        
         private void MonthCarouselPage_OnCurrentPageChanged(object sender, EventArgs e)
         {
             Title = MonthName;

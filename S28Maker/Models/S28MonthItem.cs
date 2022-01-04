@@ -17,7 +17,7 @@ namespace S28Maker.Models
 
         private S28MonthItem() { }
 
-        public static readonly List<S28MonthItem> All = new int[6].Select((_, idx) => new S28MonthItem { Index = idx, Name = MonthRenderer.GetMonthName(idx) }).ToList();
+        public static readonly List<S28MonthItem> All = MonthRenderer.MonthNames.Select((name, idx) => new S28MonthItem { Index = idx, Name = name }).ToList();
 
         public static S28MonthItem Current => All[MonthRenderer.GetMonthPos(DateTime.Today.AddMonths(-1).Month)];
 

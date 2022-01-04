@@ -6,7 +6,7 @@
                x:Class="S28Maker.Views.MonthCarouselPage"
                CurrentPageChanged="MonthCarouselPage_OnCurrentPageChanged">
     <CarouselPage.ToolbarItems>
-        <ToolbarItem x:Name="btnShare" Text="Share" Command="{Binding ShareCommand}" />
+        <ToolbarItem Text="Share" Command="{Binding ShareCommand}" />
     </CarouselPage.ToolbarItems>
     <CarouselPage.ItemTemplate>
         <DataTemplate x:DataType="models:S28MonthItem">
