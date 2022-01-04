@@ -13,6 +13,7 @@ namespace S28Maker.ViewModels
 {
     public class FillS28FormsModel : BaseViewModel
     {
+        private readonly S28MonthItem _month;
         private Item _selectedItem;
 
         public ObservableCollection<Item> Items { get; }
@@ -24,9 +25,10 @@ namespace S28Maker.ViewModels
 
         public event EventHandler ToolbarUpdateRequired;
         
-        public FillS28FormsModel()
+        public FillS28FormsModel(S28MonthItem month)
         {
-            Title = "";
+            _month = month;
+            Title = _month.Name;
             Items = new ObservableCollection<Item>();
             IsBusy = true;
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
@@ -55,11 +57,11 @@ namespace S28Maker.ViewModels
         {
             if (S28Document.Current == null) return;
 
-            var month = S28Document.Current.Month + increment;
-            if (month < 0) month = 11;
-            if (month > 11) month = 0;
-            S28Document.Current.Month = month;
-            OnToolbarUpdateRequired();
+            //var month = S28Document.Current.Month + increment;
+            //if (month < 0) month = 11;
+            //if (month > 11) month = 0;
+            //S28Document.Current.Month = month;
+            //OnToolbarUpdateRequired();
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -72,7 +74,7 @@ namespace S28Maker.ViewModels
                 
                 foreach (var item in S28Document.Current.Items)
                 {
-                    Items.Add(item);
+                    Items.Add(new Item(item, _month));
                 }
             }
             catch (Exception ex)

@@ -1,8 +1,4 @@
-﻿using S28Maker.Services;
-using S28Maker.Views;
-using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace S28Maker
 {
@@ -13,7 +9,6 @@ namespace S28Maker
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 

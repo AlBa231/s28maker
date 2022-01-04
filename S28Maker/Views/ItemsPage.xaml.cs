@@ -17,25 +17,34 @@ namespace S28Maker.Views
     {
         FillS28FormsModel _viewModel;
 
+        public S28MonthItem Month { get; set; }
+
         public ItemsPage()
         {
             InitializeComponent();
 
-            BindingContext = _viewModel = new FillS28FormsModel();
-            _viewModel.ToolbarUpdateRequired += _viewModel_OnToolbarUpdateRequired;
+
         }
 
         private void _viewModel_OnToolbarUpdateRequired(object sender, EventArgs e)
         {
-            btnNextMonth.IsEnabled = S28Document.Current != null && S28Document.Current.Month < 11;
-            btnPrevMonth.IsEnabled = S28Document.Current != null && S28Document.Current.Month > 0;
-            btnShare.IsEnabled = S28Document.Current != null;
-            Title = MonthRenderer.GetMonthName(S28Document.Current?.Month ?? 0);
+            //btnNextMonth.IsEnabled = S28Document.Current != null && S28Document.Current.Month < 11;
+            //btnPrevMonth.IsEnabled = S28Document.Current != null && S28Document.Current.Month > 0;
+            //btnShare.IsEnabled = S28Document.Current != null;
+            //Title = MonthRenderer.GetMonthName(S28Document.Current?.Month ?? 0);
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            if (Month == null)
+            {
+                Month = (S28MonthItem) BindingContext;
+                Title = Month.Name;
+
+                BindingContext = _viewModel = new FillS28FormsModel(Month);
+                _viewModel.ToolbarUpdateRequired += _viewModel_OnToolbarUpdateRequired;
+            }
             _viewModel.OnAppearing();
         }
     }

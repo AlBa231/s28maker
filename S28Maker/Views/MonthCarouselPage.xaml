@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CarouselPage  xmlns="http://xamarin.com/schemas/2014/forms"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:views="clr-namespace:S28Maker.Views;assembly=S28Maker"
+               xmlns:models="clr-namespace:S28Maker.Models;assembly=S28Maker"
+               x:Class="S28Maker.Views.MonthCarouselPage"
+               CurrentPageChanged="MonthCarouselPage_OnCurrentPageChanged">
+    <CarouselPage.ToolbarItems>
+        <ToolbarItem x:Name="btnShare" Text="Share" Command="{Binding ShareCommand}" />
+    </CarouselPage.ToolbarItems>
+    <CarouselPage.ItemTemplate>
+        <DataTemplate x:DataType="models:S28MonthItem">
+            <views:ItemsPage Title="{Binding Name}"></views:ItemsPage>
+        </DataTemplate>
+    </CarouselPage.ItemTemplate>
+</CarouselPage>

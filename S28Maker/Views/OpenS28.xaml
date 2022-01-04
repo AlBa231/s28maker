@@ -8,8 +8,9 @@
         <viewModels:OpenS28ViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+        <StackLayout Padding="10,0,10,0" VerticalOptions="CenterAndExpand">
+            <Button FontSize="36" WidthRequest="50" HeightRequest="250" VerticalOptions="FillAndExpand" 
+                     Text="Открыть S-28" Command="{Binding OpenFileCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

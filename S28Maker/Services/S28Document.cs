@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using iText.Forms;
+using iText.Forms.Fields;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using S28Maker.Models;
@@ -18,7 +19,7 @@ namespace S28Maker.Services
         private static readonly Regex BookNameRegex = new Regex(@"\d{4}\s(.+)");
         private static readonly Regex FormValueRegex = new Regex(@"9(\d+)_(\d+)_S28Value");
         private PdfDocument _pdfDocument;
-        private int _month = DateTime.Today.AddMonths(-1).Month;
+        //private int _month = DateTime.Today.AddMonths(-1).Month;
 
         private static S28Document _instance;
 
@@ -31,21 +32,25 @@ namespace S28Maker.Services
 
         public static string FileName { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "S-28.pdf");
 
-        public int Month
-        {
-            get => _month;
-            set
-            {
-                if (value == _month) return;
-                _month = value;
-                if (Items == null) return;
+        private PdfAcroForm _acroForm;
 
-                var monthIdx = 2 + (MonthRenderer.GetMonthPos(_month) * 3);
+        private PdfAcroForm AcroForm => _acroForm ??= (_pdfDocument != null ? PdfAcroForm.GetAcroForm(_pdfDocument, false) : null);
 
-                Items.ForEach(i=>i.Value = Month.ToString());
-                //Items.ForEach(i=>i.Value = i.RowValues[monthIdx]?.GetValueAsString());
-            }
-        }
+        //public int Month
+        //{
+        //    get => _month;
+        //    set
+        //    {
+        //        if (value == _month) return;
+        //        _month = value;
+        //        if (Items == null) return;
+
+        //        var monthIdx = 2 + (MonthRenderer.GetMonthPos(_month) * 3);
+
+        //        //Items.ForEach(i=>i.Value = Month.ToString());
+        //        //Items.ForEach(i=>i.Value = i.RowValues[monthIdx]?.GetValueAsString());
+        //    }
+        //}
 
         public static void SavePdfLocally(Stream stream)
         {
@@ -85,43 +90,41 @@ namespace S28Maker.Services
             return null;
         }
 
+        public PdfFormField GetFormField(int row, int col)
+        {
+            return AcroForm?.GetField($"9{col + 1:00}_{row + 1}_S28Value");
+        }
+
         public void Parse()
         {
             //PdfDocument doc = new PdfDocument(stream);
             //var page = doc.Pages[0];
             // doc.AcroForm.Fields.Names
 
-            
-            
-
-
-
-
-
             var txt = PdfTextExtractor.GetTextFromPage(_pdfDocument.GetFirstPage()) + "\n" + PdfTextExtractor.GetTextFromPage(_pdfDocument.GetLastPage());
 
             var lines = BookNameRegex.Matches(txt);
 
-            Items = lines.OfType<Match>().Select(m => new Item {Text = m.Groups[1].Value, Description = m.Value }).ToList();
+            Items = lines.OfType<Match>().Select((m, idx) => new Item {Text = m.Groups[1].Value, Id = idx, Description = m.Value }).ToList();
             
-            var acroForms = PdfAcroForm.GetAcroForm(_pdfDocument, false).GetFormFields();
-            foreach (var pdfFormField in acroForms)
-            {
-                var match = FormValueRegex.Match(pdfFormField.Key);
-                if (match.Success)
-                {
-                    try
-                    {
-                        var rowIdx = Convert.ToInt32(match.Groups[2].Value) - 1;
-                        var cellIdx = Convert.ToInt32(match.Groups[1].Value) - 1;
-                        Items[rowIdx].RowValues[cellIdx] = pdfFormField.Value;
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e);
-                    }
-                }
-            }
+            //var acroForms = PdfAcroForm.GetAcroForm(_pdfDocument, false).GetFormFields();
+            //foreach (var pdfFormField in acroForms)
+            //{
+            //    var match = FormValueRegex.Match(pdfFormField.Key);
+            //    if (match.Success)
+            //    {
+            //        try
+            //        {
+            //            var rowIdx = Convert.ToInt32(match.Groups[2].Value) - 1;
+            //            var cellIdx = Convert.ToInt32(match.Groups[1].Value) - 1;
+            //            Items[rowIdx].RowValues[cellIdx] = pdfFormField.Value;
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            Debug.WriteLine(e);
+            //        }
+            //    }
+            //}
             
         }
 

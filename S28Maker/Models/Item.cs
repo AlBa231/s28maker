@@ -2,27 +2,41 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using iText.Forms.Fields;
-using iText.Layout.Element;
 
 namespace S28Maker.Models
 {
     public class Item : INotifyPropertyChanged
     {
+        private readonly S28MonthItem _month;
         private string _value;
-        public string Id { get; set; }
+
+        public Item() { }
+
+        public Item(Item item, S28MonthItem month)
+        {
+            _month = month ?? throw new ArgumentNullException(nameof(month));
+            Id = item.Id;
+            Text = item.Text;
+            Description = item.Description;
+            _value = _month.GetFormFieldValue(item.Id);
+        }
+
+        public int Id { get; set; }
         public string Text { get; set; }
         public string Description { get; set; }
 
         public string Value
         {
             get => _value;
-            set => SetProperty(ref _value, value);
+            set
+            {
+                if (value == _value) return;
+                _value = value;
+                _month.SetFormFieldValue(Id, value);
+                OnPropertyChanged(nameof(Value));
+            }
         }
 
-        public PdfFormField[] RowValues { get; set; } = new PdfFormField[19];
-
-        
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null)

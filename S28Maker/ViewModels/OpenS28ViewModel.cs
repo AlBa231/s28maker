@@ -42,13 +42,14 @@ namespace S28Maker.ViewModels
                 if (result != null)
                 {
                     S28Document.SavePdfLocally(await result.OpenReadAsync());
-                    await Shell.Current.GoToAsync(nameof(ItemsPage));
+                    await Shell.Current.GoToAsync("//" + nameof(LoadingPage));
                 }
         
                 return result;
             }
             catch (Exception ex)
             {
+                await Shell.Current.DisplayAlert("Ошибка", "Файл не распознан. Если вы уверены в нем - обратись к разработчику. \nError:" + ex.Message, "OK");
                 // The user canceled or something went wrong
             }
     
