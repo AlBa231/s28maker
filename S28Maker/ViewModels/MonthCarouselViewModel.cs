@@ -2,6 +2,7 @@
 using S28Maker.Models;
 using S28Maker.Services;
 using S28Maker.Views;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -12,6 +13,7 @@ namespace S28Maker.ViewModels
         public Command ShareCommand { get; } 
         public Command CloseCommand { get; }
         public Command CopyPrevMonthCommand { get; }
+        public Command SaveCommand { get; } 
 
         public S28MonthItem SelectedItem { get; set; } = S28MonthItem.Current;
 
@@ -29,6 +31,21 @@ namespace S28Maker.ViewModels
                 });
             });
 
+            SaveCommand = new Command(async () =>
+            {
+                if (S28Document.Current == null) return;
+                IsBusy = true;
+                S28Document.Current.Close();
+                if (S28Document.Current == null)
+                {
+                    await Shell.Current.GoToAsync("//" + nameof(LoadingPage));
+                }
+
+                IsBusy = false;
+
+                await Shell.Current.DisplayToastAsync("Сохранено");
+            });
+
             CloseCommand = new Command(async () =>
             {
                 if (S28Document.Current == null) return;
@@ -43,6 +60,7 @@ namespace S28Maker.ViewModels
                     "Скопировать", "Нет, не надо")) return;
 
                 SelectedItem.CopyFromPreviousMonth();
+                await Shell.Current.DisplayToastAsync("Скопировано");
             });
         }
     }

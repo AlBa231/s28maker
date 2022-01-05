@@ -11,6 +11,7 @@
         <viewModels:MonthCarouselViewModel></viewModels:MonthCarouselViewModel>
     </CarouselPage.BindingContext>
     <CarouselPage.ToolbarItems>
+        <ToolbarItem IconImageSource="sharp_save_black_24dp.png" Command="{Binding SaveCommand}"></ToolbarItem>
         <ToolbarItem Order="Secondary" Text="Отправить файл" Command="{Binding ShareCommand}" />
         <ToolbarItem Order="Secondary" Text="Открыть другой S-28" Command="{Binding CloseCommand}" />
         <ToolbarItem Order="Secondary" Text="Скопировать с предыдущего месяца" Command="{Binding CopyPrevMonthCommand}" />
