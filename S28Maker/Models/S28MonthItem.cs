@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using iText.Forms.Fields;
 using S28Maker.Services;
@@ -24,6 +25,9 @@ namespace S28Maker.Models
         private PdfFormField[] CurrentValues { get; set; }
         private PdfFormField[] ReceiveValues { get; set; }
         private PdfFormField[] CalcValues { get; set; }
+        private ObservableCollection<Item> _items;
+
+        public ObservableCollection<Item> Items => _items ??= LoadItems();
 
         private S28MonthItem _prevMonth;
 
@@ -93,7 +97,33 @@ namespace S28Maker.Models
                 month.CurrentValues = null;
                 month.ReceiveValues = null;
                 month.CalcValues = null;
+                month._items = null;
             }
+        }
+
+        public void CopyFromPreviousMonth()
+        {
+            foreach (var item in Items)
+            {
+                var prevValue = GetPreviousMonthValue(item.Id);
+                if (string.IsNullOrWhiteSpace(prevValue)) continue;
+                item.Value = prevValue;
+                if (string.IsNullOrWhiteSpace(item.ReceiveValue))
+                    item.ReceiveValue = "0";
+            }
+        }
+
+        public ObservableCollection<Item> LoadItems()
+        {
+            var items = new ObservableCollection<Item>();
+            if (S28Document.Current == null) return items;
+                
+            foreach (var item in S28Document.Current.Items)
+            {
+                items.Add(new Item(item, this));
+            }
+
+            return items;
         }
     }
 }

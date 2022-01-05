@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using S28Maker.Models;
 using S28Maker.Services;
 using S28Maker.Views;
 using Xamarin.Essentials;
@@ -10,6 +11,9 @@ namespace S28Maker.ViewModels
     {
         public Command ShareCommand { get; } 
         public Command CloseCommand { get; }
+        public Command CopyPrevMonthCommand { get; }
+
+        public S28MonthItem SelectedItem { get; set; } = S28MonthItem.Current;
 
         public MonthCarouselViewModel()
         {
@@ -30,6 +34,15 @@ namespace S28Maker.ViewModels
                 if (S28Document.Current == null) return;
                 S28Document.Current.Close();
                 await Shell.Current.GoToAsync("//" + nameof(OpenS28));
+            });
+
+            CopyPrevMonthCommand = new Command(async () =>
+            {
+                if (!await Shell.Current.DisplayAlert("Автозаполнение", 
+                    SelectedItem.PreviousMonth == null ? "Заполнить на основании начальной колонки В наличии?" : "Переписать все цифры с месяца " + SelectedItem.PreviousMonth.Name,
+                    "Скопировать", "Нет, не надо")) return;
+
+                SelectedItem.CopyFromPreviousMonth();
             });
         }
     }

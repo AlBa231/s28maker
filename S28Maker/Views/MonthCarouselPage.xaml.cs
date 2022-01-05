@@ -22,7 +22,6 @@ namespace S28Maker.Views
         {
             InitializeComponent();
             ItemsSource = S28MonthItem.All;
-            SelectedItem = S28MonthItem.Current;
         }
         
         private void MonthCarouselPage_OnCurrentPageChanged(object sender, EventArgs e)

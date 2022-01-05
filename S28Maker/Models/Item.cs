@@ -57,10 +57,11 @@ namespace S28Maker.Models
 
         private void UpdateCalculations()
         {
+            int.TryParse(PreviousValue, out var prevValue);
             int.TryParse(ReceiveValue, out var receive);
             int.TryParse(Value, out var currentValue);
 
-            CalcValue = (receive - currentValue).ToString(CultureInfo.InvariantCulture);
+            CalcValue = (prevValue + receive - currentValue).ToString(CultureInfo.InvariantCulture);
         }
 
         public string CalcValue

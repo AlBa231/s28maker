@@ -5,13 +5,15 @@
                xmlns:models="clr-namespace:S28Maker.Models;assembly=S28Maker"
                xmlns:viewModels="clr-namespace:S28Maker.ViewModels;assembly=S28Maker"
                x:Class="S28Maker.Views.MonthCarouselPage"
-               CurrentPageChanged="MonthCarouselPage_OnCurrentPageChanged">
+               CurrentPageChanged="MonthCarouselPage_OnCurrentPageChanged"
+               SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
     <CarouselPage.BindingContext>
         <viewModels:MonthCarouselViewModel></viewModels:MonthCarouselViewModel>
     </CarouselPage.BindingContext>
     <CarouselPage.ToolbarItems>
         <ToolbarItem Order="Secondary" Text="Отправить файл" Command="{Binding ShareCommand}" />
         <ToolbarItem Order="Secondary" Text="Открыть другой S-28" Command="{Binding CloseCommand}" />
+        <ToolbarItem Order="Secondary" Text="Скопировать с предыдущего месяца" Command="{Binding CopyPrevMonthCommand}" />
     </CarouselPage.ToolbarItems>
     <CarouselPage.ItemTemplate>
         <DataTemplate x:DataType="models:S28MonthItem">

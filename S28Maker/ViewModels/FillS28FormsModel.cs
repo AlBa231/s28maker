@@ -17,9 +17,6 @@ namespace S28Maker.ViewModels
 
         public ObservableCollection<Item> Items { get; }
         public Command LoadItemsCommand { get; }
-        public Command ShareCommand { get; }
-
-        public event EventHandler ToolbarUpdateRequired;
         
         public FillS28FormsModel(S28MonthItem month)
         {
@@ -29,18 +26,6 @@ namespace S28Maker.ViewModels
             IsBusy = true;
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             
-            ShareCommand = new Command(async () =>
-            {
-                if (S28Document.Current == null) return;
-                if (!File.Exists(S28Document.NewFileName)) return;
-                OnToolbarUpdateRequired();
-                S28Document.Current.Close();
-                await Share.RequestAsync(new ShareFileRequest
-                {
-                    Title = "Отправить S-28",
-                    File = new ShareFile(S28Document.NewFileName)
-                });
-            });
             IsBusy = false;
         }
         
@@ -49,12 +34,11 @@ namespace S28Maker.ViewModels
             IsBusy = true;
             try
             {
-                Items.Clear();
                 if (S28Document.Current == null) return;
-                
-                foreach (var item in S28Document.Current.Items)
+                Items.Clear();
+                foreach (var monthItem in _month.Items)
                 {
-                    Items.Add(new Item(item, _month));
+                    Items.Add(monthItem);
                 }
             }
             catch (Exception ex)
@@ -71,11 +55,6 @@ namespace S28Maker.ViewModels
         public void OnAppearing()
         {
             IsBusy = true;
-        }
-        
-        protected virtual void OnToolbarUpdateRequired()
-        {
-            ToolbarUpdateRequired?.Invoke(this, EventArgs.Empty);
         }
     }
 }
