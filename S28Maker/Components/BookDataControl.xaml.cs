@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading.Tasks;
+using S28Maker.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -22,8 +25,25 @@ namespace S28Maker.Components
                     })
                 }
             );
+
+            AddRemCountLabel.GestureRecognizers.Add(new TapGestureRecognizer()
+            {
+                Command = new Command(async () => await ShowAddCounter())
+            });
         }
-        
+
+        private async Task ShowAddCounter()
+        {
+            var countStr = await Shell.Current.DisplayPromptAsync("Получено публикаций",
+                "Введите кол-во полученных публикаций",
+                initialValue: ((Item) BindingContext).ReceiveValue, 
+                keyboard: Keyboard.Numeric);
+            if (int.TryParse(countStr, out var count))
+            {
+                ((Item) BindingContext).ReceiveValue = count.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
         private void InStockCountStepper_OnValueChanged(object sender, ValueChangedEventArgs e)
         {
             InStockCountLabel.Text = ((int) InStockCountStepper.Value).ToString();

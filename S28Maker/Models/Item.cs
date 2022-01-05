@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
@@ -32,8 +33,11 @@ namespace S28Maker.Models
             get => _value ??= _month.GetFormFieldValue(Id);
             set
             {
-                if (SetProperty(ref _value, value)) 
+                if (SetProperty(ref _value, value))
+                {
                     _month.SetFormFieldValue(Id, value);
+                    UpdateCalculations();
+                }
             }
         }
         public string PreviousValue => _month.GetPreviousMonthValue(Id);
@@ -43,10 +47,22 @@ namespace S28Maker.Models
             get => _recieveValue ??= _month.GetReceiveFormField(Id)?.GetValueAsString();
             set
             {
-                if (SetProperty(ref _recieveValue, value)) 
+                if (SetProperty(ref _recieveValue, value))
+                {
                     _month.GetReceiveFormField(Id)?.SetValue(value);
+                    UpdateCalculations();
+                }
             }
         }
+
+        private void UpdateCalculations()
+        {
+            int.TryParse(ReceiveValue, out var receive);
+            int.TryParse(Value, out var currentValue);
+
+            CalcValue = (receive - currentValue).ToString(CultureInfo.InvariantCulture);
+        }
+
         public string CalcValue
         {
             get => _calcValue ??= _month.GetCalcFormField(Id)?.GetValueAsString();
@@ -56,9 +72,6 @@ namespace S28Maker.Models
                     _month.GetCalcFormField(Id)?.SetValue(value);
             }
         }
-
-        
-        public Command CopyOldValue { get; private set; }
 
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
