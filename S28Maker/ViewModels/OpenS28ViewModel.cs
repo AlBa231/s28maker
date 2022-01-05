@@ -42,7 +42,7 @@ namespace S28Maker.ViewModels
                 if (result != null)
                 {
                     S28Document.SavePdfLocally(await result.OpenReadAsync());
-                    await Shell.Current.GoToAsync("//" + nameof(LoadingPage));
+                    await Shell.Current.GoToAsync("//" + nameof(MonthCarouselPage));
                 }
         
                 return result;
