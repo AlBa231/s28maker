@@ -81,5 +81,19 @@ namespace S28Maker.Models
         {
             GetFormField(itemId)?.SetValue(value);
         }
+
+        /// <summary>
+        /// Clear all loaded PdfFormFields.
+        /// </summary>
+        public static void ResetCache()
+        {
+            foreach (var month in All)
+            {
+                month.StartFieldsValues = null;
+                month.CurrentValues = null;
+                month.ReceiveValues = null;
+                month.CalcValues = null;
+            }
+        }
     }
 }

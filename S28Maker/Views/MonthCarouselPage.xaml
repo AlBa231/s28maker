@@ -3,10 +3,15 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:views="clr-namespace:S28Maker.Views;assembly=S28Maker"
                xmlns:models="clr-namespace:S28Maker.Models;assembly=S28Maker"
+               xmlns:viewModels="clr-namespace:S28Maker.ViewModels;assembly=S28Maker"
                x:Class="S28Maker.Views.MonthCarouselPage"
                CurrentPageChanged="MonthCarouselPage_OnCurrentPageChanged">
+    <CarouselPage.BindingContext>
+        <viewModels:MonthCarouselViewModel></viewModels:MonthCarouselViewModel>
+    </CarouselPage.BindingContext>
     <CarouselPage.ToolbarItems>
-        <ToolbarItem Text="Share" Command="{Binding ShareCommand}" />
+        <ToolbarItem Order="Secondary" Text="Отправить файл" Command="{Binding ShareCommand}" />
+        <ToolbarItem Order="Secondary" Text="Открыть другой S-28" Command="{Binding CloseCommand}" />
     </CarouselPage.ToolbarItems>
     <CarouselPage.ItemTemplate>
         <DataTemplate x:DataType="models:S28MonthItem">

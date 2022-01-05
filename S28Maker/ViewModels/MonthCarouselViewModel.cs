@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using S28Maker.Services;
+using S28Maker.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -10,7 +8,8 @@ namespace S28Maker.ViewModels
 {
     public class MonthCarouselViewModel : BaseViewModel
     {
-        public Command ShareCommand { get; }
+        public Command ShareCommand { get; } 
+        public Command CloseCommand { get; }
 
         public MonthCarouselViewModel()
         {
@@ -24,6 +23,13 @@ namespace S28Maker.ViewModels
                     Title = "Отправить S-28",
                     File = new ShareFile(S28Document.FileName)
                 });
+            });
+
+            CloseCommand = new Command(async () =>
+            {
+                if (S28Document.Current == null) return;
+                S28Document.Current.Close();
+                await Shell.Current.GoToAsync("//" + nameof(OpenS28));
             });
         }
     }

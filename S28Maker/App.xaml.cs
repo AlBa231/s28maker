@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using S28Maker.Services;
+using Xamarin.Forms;
 
 namespace S28Maker
 {
@@ -18,6 +19,7 @@ namespace S28Maker
 
         protected override void OnSleep()
         {
+            S28Document.Current?.Close();
         }
 
         protected override void OnResume()

@@ -21,7 +21,6 @@ namespace S28Maker.Views
         public MonthCarouselPage()
         {
             InitializeComponent();
-            BindingContext = new MonthCarouselViewModel();
             ItemsSource = S28MonthItem.All;
             SelectedItem = S28MonthItem.Current;
         }
