@@ -9,6 +9,8 @@ namespace S28Maker.Models
     {
         private readonly S28MonthItem _month;
         private string _value;
+        private string _recieveValue;
+        private string _calcValue;
 
         public Item() { }
 
@@ -18,7 +20,6 @@ namespace S28Maker.Models
             Id = item.Id;
             Text = item.Text;
             Description = item.Description;
-            _value = _month.GetFormFieldValue(item.Id);
         }
 
         public int Id { get; set; }
@@ -27,13 +28,31 @@ namespace S28Maker.Models
 
         public string Value
         {
-            get => _value;
+            get => _value ??= _month.GetFormFieldValue(Id);
             set
             {
-                if (value == _value) return;
-                _value = value;
-                _month.SetFormFieldValue(Id, value);
-                OnPropertyChanged(nameof(Value));
+                if (SetProperty(ref _value, value)) 
+                    _month.SetFormFieldValue(Id, value);
+            }
+        }
+        public string PreviousValue => _month.GetPreviousMonthValue(Id);
+
+        public string ReceiveValue
+        {
+            get => _recieveValue ??= _month.GetReceiveFormField(Id)?.GetValueAsString();
+            set
+            {
+                if (SetProperty(ref _recieveValue, value)) 
+                    _month.GetReceiveFormField(Id)?.SetValue(value);
+            }
+        }
+        public string CalcValue
+        {
+            get => _calcValue ??= _month.GetCalcFormField(Id)?.GetValueAsString();
+            set
+            {
+                if (SetProperty(ref _calcValue, value)) 
+                    _month.GetCalcFormField(Id)?.SetValue(value);
             }
         }
 

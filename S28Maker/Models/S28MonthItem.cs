@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
 using iText.Forms.Fields;
 using S28Maker.Services;
-using S28Maker.ViewModels;
 
 namespace S28Maker.Models
 {
@@ -21,20 +17,54 @@ namespace S28Maker.Models
 
         public static S28MonthItem Current => All[MonthRenderer.GetMonthPos(DateTime.Today.AddMonths(-1).Month)];
 
+        /// <summary>
+        /// The first column (в наличии) of whole table.
+        /// </summary>
+        private PdfFormField[] StartFieldsValues { get; set; }
         private PdfFormField[] CurrentValues { get; set; }
+        private PdfFormField[] ReceiveValues { get; set; }
+        private PdfFormField[] CalcValues { get; set; }
 
-        //private FillS28FormsModel _fillModel;
-        //public FillS28FormsModel FillModel => _fillModel ??= new FillS28FormsModel(this);
+        private S28MonthItem _prevMonth;
 
+        public S28MonthItem PreviousMonth => _prevMonth ??= Index > 0 ? All[Index - 1] : null;
+        
         private PdfFormField GetFormField(int itemId)
         {
-            
             if (itemId >= S28Document.Current.Items.Count) throw new ArgumentOutOfRangeException(nameof(itemId));
 
             CurrentValues ??= new PdfFormField[S28Document.Current.Items.Count];
 
-            var field = CurrentValues[itemId] ??= S28Document.Current.GetFormField(itemId, 2 + Index * 3);
-            return field;
+            return CurrentValues[itemId] ??= S28Document.Current.GetFormField(itemId, (int)S28Column.CurrentItems + Index * 3);
+        }
+
+        public PdfFormField GetReceiveFormField(int itemId)
+        {
+            if (itemId >= S28Document.Current.Items.Count) throw new ArgumentOutOfRangeException(nameof(itemId));
+
+            ReceiveValues ??= new PdfFormField[S28Document.Current.Items.Count];
+
+            return ReceiveValues[itemId] ??= S28Document.Current.GetFormField(itemId, (int)S28Column.NewItems + Index * 3);
+        }
+        public PdfFormField GetCalcFormField(int itemId)
+        {
+            if (itemId >= S28Document.Current.Items.Count) throw new ArgumentOutOfRangeException(nameof(itemId));
+
+            CalcValues ??= new PdfFormField[S28Document.Current.Items.Count];
+
+            return CalcValues[itemId] ??= S28Document.Current.GetCalcFormField(itemId, (int)S28Column.CalcItems + Index * 3);
+        }
+        public string GetPreviousMonthValue(int itemId)
+        {
+            if (itemId >= S28Document.Current.Items.Count) throw new ArgumentOutOfRangeException(nameof(itemId));
+
+            if (PreviousMonth == null)
+            {
+                StartFieldsValues ??= new PdfFormField[S28Document.Current.Items.Count];
+                return (StartFieldsValues[itemId] ??= S28Document.Current.GetFormField(itemId, 0))?.GetValueAsString();
+            }
+
+            return PreviousMonth.GetFormFieldValue(itemId);
         }
 
         public string GetFormFieldValue(int itemId)

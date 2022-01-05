@@ -94,6 +94,10 @@ namespace S28Maker.Services
         {
             return AcroForm?.GetField($"9{col + 1:00}_{row + 1}_S28Value");
         }
+        public PdfFormField GetCalcFormField(int row, int col)
+        {
+            return AcroForm?.GetField($"9{col + 1:00}_{row + 1}_S28Calc");
+        }
 
         public void Parse()
         {

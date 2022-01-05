@@ -11,13 +11,10 @@ namespace S28Maker.Views
     {
         public LoadingPage()
         {
-            Content = new StackLayout
-            {
-                Children = {
-                    new ActivityIndicator() { IsRunning = true,
-                        VerticalOptions = LayoutOptions.CenterAndExpand }
-                }
-            };
+            Content = new ActivityIndicator
+            { IsRunning = true, Scale = 4,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand };
         }
 
         protected override void OnAppearing()
