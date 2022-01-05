@@ -18,6 +18,7 @@
 
 # Xamarin Components
 Components/
+!/*/Components/  
 
 # Build results
 [Dd]ebug/

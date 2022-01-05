@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Xamarin.Forms;
 
 namespace S28Maker.Models
 {
@@ -55,6 +56,9 @@ namespace S28Maker.Models
                     _month.GetCalcFormField(Id)?.SetValue(value);
             }
         }
+
+        
+        public Command CopyOldValue { get; private set; }
 
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
