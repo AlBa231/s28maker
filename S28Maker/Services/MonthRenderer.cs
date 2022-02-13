@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace S28Maker.Services
+﻿namespace S28Maker.Services
 {
-    static class MonthRenderer
+    public static class MonthRenderer
     {
         public static readonly string[] MonthNames = { "сент/март", "окт/апр", "нояб/май", "дек/июнь","янв/июль", "февр/авг" };
 
@@ -13,11 +9,6 @@ namespace S28Maker.Services
         public static int GetMonthPos(int month)
         {
             return (month + StartMonth) % MonthNames.Length;
-        }
-
-        public static string GetMonthName(int month)
-        {
-            return MonthNames[GetMonthPos(month)];
         }
     }
 }

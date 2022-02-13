@@ -14,10 +14,16 @@ namespace S28Maker.ViewModels
 
         public OpenS28ViewModel()
         {
-            OpenFileCommand = new Command(async () => await OpenS28());
+            OpenFileCommand = new Command(async () => await ShowOpenFileDialog());
         }
 
-        async Task OpenS28()
+        async Task ShowOpenFileDialog()
+        {
+            var options = SetupPickOptions();
+            await PickAndShow(options);
+        }
+
+        private static PickOptions SetupPickOptions()
         {
             var customFileType =
                 new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
@@ -30,8 +36,7 @@ namespace S28Maker.ViewModels
                 PickerTitle = "Please select a S-28.pdf",
                 FileTypes = customFileType,
             };
-
-            await PickAndShow(options);
+            return options;
         }
 
         async Task<FileResult> PickAndShow(PickOptions options)

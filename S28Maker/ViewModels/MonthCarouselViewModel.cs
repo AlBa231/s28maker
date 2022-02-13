@@ -15,7 +15,7 @@ namespace S28Maker.ViewModels
         public Command CopyPrevMonthCommand { get; }
         public Command SaveCommand { get; } 
 
-        public S28MonthItem SelectedItem { get; set; } = S28MonthItem.Current;
+        public IS28MonthColumn SelectedItem { get; set; } = S28Document.Current.CurrentMonth;
 
         public MonthCarouselViewModel()
         {
@@ -55,11 +55,12 @@ namespace S28Maker.ViewModels
 
             CopyPrevMonthCommand = new Command(async () =>
             {
-                if (!await Shell.Current.DisplayAlert("Автозаполнение", 
-                    SelectedItem.PreviousMonth == null ? "Заполнить на основании начальной колонки В наличии?" : "Переписать все цифры с месяца " + SelectedItem.PreviousMonth.Name,
-                    "Скопировать", "Нет, не надо")) return;
+                //S28Document.Current.GetMonth()
+                //if (!await Shell.Current.DisplayAlert("Автозаполнение", 
+                //    SelectedItem.PreviousMonth == null ? "Заполнить на основании начальной колонки В наличии?" : "Переписать все цифры с месяца " + SelectedItem.PreviousMonth.Name,
+                //    "Скопировать", "Нет, не надо")) return;
 
-                SelectedItem.CopyFromPreviousMonth();
+                //SelectedItem.CopyFromPreviousMonth();
                 await Shell.Current.DisplayToastAsync("Скопировано");
             });
         }

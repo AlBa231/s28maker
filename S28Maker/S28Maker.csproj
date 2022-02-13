@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\S28Row.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="itext7" Version="7.2.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" />  

@@ -17,7 +17,7 @@
         <ToolbarItem Order="Secondary" Text="Скопировать с предыдущего месяца" Command="{Binding CopyPrevMonthCommand}" />
     </CarouselPage.ToolbarItems>
     <CarouselPage.ItemTemplate>
-        <DataTemplate x:DataType="models:S28MonthItem">
+        <DataTemplate x:DataType="models:IS28MonthColumn">
             <views:ItemsPage Title="{Binding Name}"></views:ItemsPage>
         </DataTemplate>
     </CarouselPage.ItemTemplate>

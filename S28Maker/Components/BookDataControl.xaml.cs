@@ -36,11 +36,11 @@ namespace S28Maker.Components
         {
             var countStr = await Shell.Current.DisplayPromptAsync("Получено публикаций",
                 "Введите кол-во полученных публикаций",
-                initialValue: ((Item) BindingContext).ReceiveValue, 
+                initialValue: ((IS28FieldRow) BindingContext).ReceivedValue, 
                 keyboard: Keyboard.Numeric);
             if (int.TryParse(countStr, out var count))
             {
-                ((Item) BindingContext).ReceiveValue = count.ToString(CultureInfo.InvariantCulture);
+                ((IS28FieldRow) BindingContext).ReceivedValue = count.ToString(CultureInfo.InvariantCulture);
             }
         }
 

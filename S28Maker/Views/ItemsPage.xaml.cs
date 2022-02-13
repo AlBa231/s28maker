@@ -8,7 +8,7 @@ namespace S28Maker.Views
     {
         FillS28FormsModel _viewModel;
 
-        public S28MonthItem Month { get; set; }
+        public IS28MonthColumn Month { get; set; }
 
         public ItemsPage()
         {
@@ -21,7 +21,7 @@ namespace S28Maker.Views
             base.OnAppearing();
             if (Month == null)
             {
-                Month = (S28MonthItem) BindingContext;
+                Month = (IS28MonthColumn) BindingContext;
                 BindingContext = _viewModel = new FillS28FormsModel(Month);
             }
             _viewModel.OnAppearing();

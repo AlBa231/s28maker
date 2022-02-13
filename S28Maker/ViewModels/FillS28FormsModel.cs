@@ -3,30 +3,29 @@ using S28Maker.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using S28Maker.Services;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace S28Maker.ViewModels
 {
     public class FillS28FormsModel : BaseViewModel
     {
-        private readonly S28MonthItem _month;
+        private readonly IS28MonthColumn month;
 
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<IS28FieldRow> Items { get; }
         public Command LoadItemsCommand { get; }
         
-        public FillS28FormsModel(S28MonthItem month)
+        public FillS28FormsModel(IS28MonthColumn month)
         {
-            _month = month;
-            Title = _month.Name;
-            Items = new ObservableCollection<Item>();
+            this.month = month ?? throw new ArgumentNullException(nameof(month));
+            Title = month.Name;
+            Items = new ObservableCollection<IS28FieldRow>();
             IsBusy = true;
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             
             IsBusy = false;
+            
         }
         
         async Task ExecuteLoadItemsCommand()
@@ -36,7 +35,7 @@ namespace S28Maker.ViewModels
             {
                 if (S28Document.Current == null) return;
                 Items.Clear();
-                foreach (var monthItem in _month.Items)
+                foreach (var monthItem in month.MonthRows)
                 {
                     Items.Add(monthItem);
                 }

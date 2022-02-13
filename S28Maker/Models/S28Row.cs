@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
 
 namespace S28Maker.Models
 {
-    public class Item : INotifyPropertyChanged
+    public class S28Row : INotifyPropertyChanged
     {
-        private readonly S28MonthItem _month;
-        private string _value;
-        private string _recieveValue;
-        private string _calcValue;
+        private readonly S28MonthColumn month;
+        private readonly S28MonthColumn previousMonth;
+        private string value;
+        private string recieveValue;
+        private string calcValue;
 
-        public Item() { }
+        public S28Row() { }
 
-        public Item(Item item, S28MonthItem month)
+        public S28Row(S28Row item, S28MonthColumn month, S28MonthColumn previousMonth)
         {
-            _month = month ?? throw new ArgumentNullException(nameof(month));
+            this.month = month ?? throw new ArgumentNullException(nameof(month));
+            this.previousMonth = previousMonth ?? throw new ArgumentNullException(nameof(month));
             Id = item.Id;
             Text = item.Text;
             Description = item.Description;
@@ -30,29 +31,33 @@ namespace S28Maker.Models
 
         public string Value
         {
-            get => _value ??= _month.GetFormFieldValue(Id);
+            get => value ??= month.GetFormFieldValue(Id, S28ColumnType.Available);
             set
             {
-                if (SetProperty(ref _value, value))
+                if (SetProperty(ref this.value, value))
                 {
-                    _month.SetFormFieldValue(Id, value);
-                    UpdateCalculations();
+                    SetFormFieldValue(S28ColumnType.Available, value);
                 }
             }
         }
-        public string PreviousValue => _month.GetPreviousMonthValue(Id);
+        public string PreviousValue => previousMonth.GetFormFieldValue(Id, S28ColumnType.Available);
 
         public string ReceiveValue
         {
-            get => _recieveValue ??= _month.GetReceiveFormField(Id)?.GetValueAsString();
+            get => recieveValue ??= month.GetFormFieldValue(Id, S28ColumnType.Recieved);
             set
             {
-                if (SetProperty(ref _recieveValue, value))
+                if (SetProperty(ref recieveValue, value))
                 {
-                    _month.GetReceiveFormField(Id)?.SetValue(value);
-                    UpdateCalculations();
+                    SetFormFieldValue(S28ColumnType.Recieved, value);
                 }
             }
+        }
+
+        private void SetFormFieldValue(S28ColumnType column, string value)
+        {
+            month.SetFormFieldValue(Id, column, value);
+            UpdateCalculations();
         }
 
         private void UpdateCalculations()
@@ -66,11 +71,11 @@ namespace S28Maker.Models
 
         public string CalcValue
         {
-            get => _calcValue ??= _month.GetCalcFormField(Id)?.GetValueAsString();
+            get => calcValue ??= month.GetFormFieldValue(Id, S28ColumnType.Calculated);
             set
             {
-                if (SetProperty(ref _calcValue, value)) 
-                    _month.GetCalcFormField(Id)?.SetValue(value);
+                if (SetProperty(ref calcValue, value)) 
+                    month.SetFormFieldValue(Id, S28ColumnType.Calculated, value);
             }
         }
 

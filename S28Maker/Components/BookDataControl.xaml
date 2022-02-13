@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<StackLayout Padding="10" x:DataType="models:Item"  xmlns="http://xamarin.com/schemas/2014/forms" 
+<StackLayout Padding="10" x:DataType="models:IS28FieldRow"  xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="S28Maker.Components.BookDataControl"
                                  xmlns:local="clr-namespace:S28Maker.ViewModels;assembly=S28Maker"
                                  xmlns:models="clr-namespace:S28Maker.Models;assembly=S28Maker">
-    <Label Text="{Binding Text}" 
+    <Label Text="{Binding Name}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
                             FontSize="20" />
@@ -45,8 +45,8 @@
                FontSize="22">
             <Label.Text>
                 <MultiBinding StringFormat="+{0}/-{1}">
-                    <Binding Path="ReceiveValue" />
-                    <Binding Path="CalcValue" />
+                    <Binding Path="ReceivedValue" />
+                    <Binding Path="CalculatedValue" />
                 </MultiBinding>
             </Label.Text>
         </Label>
