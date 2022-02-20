@@ -15,7 +15,7 @@ namespace S28Maker.Services
         IReadOnlyCollection<PublicationName> PublicationRows { get; }
     }
 
-    public class S28PdfDocument: S28DocumentBase
+    public class S28PdfDocument : S28Document
     {
         private PdfDocument pdfDocument;
 
@@ -26,18 +26,26 @@ namespace S28Maker.Services
 
         private PdfAcroForm AcroForm { get; }
 
-        public S28PdfDocument()
+        public static S28PdfDocument TryLoadLocalPdfDocument()
         {
-            LoadLocally();
-            AcroForm = PdfAcroForm.GetAcroForm(pdfDocument, false);
+            try
+            {
+                return LoadLocalPdfDocument();
+            }
+            catch (S28Exception)
+            {
+                return null;
+            }
         }
 
-        private void LoadLocally()
+        private static S28PdfDocument LoadLocalPdfDocument()
         {
             if (!File.Exists(FileName)) throw new S28Exception(FileName + " not found.");
             try
             {
-                LoadAndParse();
+                var document = new S28PdfDocument();
+                document.LoadAndParse();
+                return document;
             }
             catch (Exception ex)
             {

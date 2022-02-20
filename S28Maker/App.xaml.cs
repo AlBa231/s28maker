@@ -13,17 +13,9 @@ namespace S28Maker
             MainPage = new AppShell();
         }
 
-        protected override void OnStart()
-        {
-        }
-
         protected override void OnSleep()
         {
-            S28PdfDocument.Current?.Close();
-        }
-
-        protected override void OnResume()
-        {
+            S28Document.Current?.Close();
         }
     }
 }

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace S28Maker.Services
 {
-    public abstract class S28DocumentBase: IS28Document
+    public abstract class S28Document: IS28Document
     {
 
-        public static S28DocumentBase Current { get; set;}
+        public static S28Document Current { get; set;}
 
         public IReadOnlyCollection<PublicationName> PublicationRows { get; protected set; }
 
