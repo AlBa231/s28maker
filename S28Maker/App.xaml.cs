@@ -19,7 +19,7 @@ namespace S28Maker
 
         protected override void OnSleep()
         {
-            S28Document.Current?.Close();
+            S28PdfDocument.Current?.Close();
         }
 
         protected override void OnResume()

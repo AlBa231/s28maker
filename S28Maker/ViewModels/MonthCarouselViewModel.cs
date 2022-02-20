@@ -15,28 +15,28 @@ namespace S28Maker.ViewModels
         public Command CopyPrevMonthCommand { get; }
         public Command SaveCommand { get; } 
 
-        public IS28MonthColumn SelectedItem { get; set; } = S28Document.Current.CurrentMonth;
+        public IS28MonthColumn SelectedItem { get; set; } = S28DocumentBase.Current.CurrentMonth;
 
         public MonthCarouselViewModel()
         {
             ShareCommand = new Command(async () =>
             {
-                if (S28Document.Current == null) return;
-                S28Document.Current.Close();
-                if (!File.Exists(S28Document.FileName)) return;
+                if (S28DocumentBase.Current == null) return;
+                S28DocumentBase.Current.Close();
+                if (!File.Exists(S28PdfDocument.FileName)) return;
                 await Share.RequestAsync(new ShareFileRequest
                 {
                     Title = "Отправить S-28",
-                    File = new ShareFile(S28Document.FileName)
+                    File = new ShareFile(S28PdfDocument.FileName)
                 });
             });
 
             SaveCommand = new Command(async () =>
             {
-                if (S28Document.Current == null) return;
+                if (S28DocumentBase.Current == null) return;
                 IsBusy = true;
-                S28Document.Current.Close();
-                if (S28Document.Current == null)
+                S28DocumentBase.Current.Close();
+                if (S28DocumentBase.Current == null)
                 {
                     await Shell.Current.GoToAsync("//" + nameof(LoadingPage));
                 }
@@ -48,8 +48,8 @@ namespace S28Maker.ViewModels
 
             CloseCommand = new Command(async () =>
             {
-                if (S28Document.Current == null) return;
-                S28Document.Current.Close();
+                if (S28DocumentBase.Current == null) return;
+                S28DocumentBase.Current.Close();
                 await Shell.Current.GoToAsync("//" + nameof(OpenS28));
             });
 

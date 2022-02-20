@@ -14,7 +14,7 @@ namespace S28Maker.Views
         public MonthCarouselPage()
         {
             InitializeComponent();
-            ItemsSource = S28Document.Current.Monthes;
+            ItemsSource = S28PdfDocument.Current.Monthes;
         }
         
         private void MonthCarouselPage_OnCurrentPageChanged(object sender, EventArgs e)

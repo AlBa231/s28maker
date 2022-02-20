@@ -20,7 +20,7 @@ namespace S28Maker.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (S28Document.Current != null)
+            if (S28PdfDocument.Current != null)
             {
                 Shell.Current.GoToAsync("//" + nameof(MonthCarouselPage));
             }

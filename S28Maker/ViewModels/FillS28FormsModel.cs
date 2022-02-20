@@ -33,7 +33,7 @@ namespace S28Maker.ViewModels
             IsBusy = true;
             try
             {
-                if (S28Document.Current == null) return;
+                if (S28PdfDocument.Current == null) return;
                 Items.Clear();
                 foreach (var monthItem in month.MonthRows)
                 {

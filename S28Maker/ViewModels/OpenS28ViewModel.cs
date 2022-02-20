@@ -46,7 +46,7 @@ namespace S28Maker.ViewModels
                 var result = await FilePicker.PickAsync(options);
                 if (result != null)
                 {
-                    S28Document.SavePdfLocally(await result.OpenReadAsync());
+                    S28PdfDocument.SavePdfLocally(await result.OpenReadAsync());
                     await Shell.Current.GoToAsync("//" + nameof(MonthCarouselPage));
                 }
         
