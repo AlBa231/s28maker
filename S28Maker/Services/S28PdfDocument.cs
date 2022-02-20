@@ -6,6 +6,7 @@ using System.Linq;
 using iText.Forms;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
+using S28Maker.Error;
 using S28Maker.Models;
 
 namespace S28Maker.Services
@@ -24,23 +25,24 @@ namespace S28Maker.Services
 
         public static string FileName { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "S-28.pdf");
 
-        private PdfAcroForm AcroForm { get; }
+        private PdfAcroForm AcroForm { get; set; }
 
         public static S28PdfDocument TryLoadLocalPdfDocument()
         {
             try
             {
-                return LoadLocalPdfDocument();
+                if (File.Exists(FileName))
+                    return LoadLocalPdfDocument();
             }
-            catch (S28Exception)
+            catch (Exception ex)
             {
-                return null;
+                S28ErrorHandler.Current.ShowError(ex);
             }
+            return null;
         }
 
         private static S28PdfDocument LoadLocalPdfDocument()
         {
-            if (!File.Exists(FileName)) throw new S28Exception(FileName + " not found.");
             try
             {
                 var document = new S28PdfDocument();
@@ -58,6 +60,7 @@ namespace S28Maker.Services
         {
             pdfDocument = new PdfDocument(new PdfReader(FileName), new PdfWriter(NewFileName));
             Parse();
+            AcroForm = PdfAcroForm.GetAcroForm(pdfDocument, false);
         }
 
         private void Parse()
