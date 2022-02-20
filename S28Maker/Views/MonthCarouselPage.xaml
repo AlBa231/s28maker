@@ -6,7 +6,7 @@
                xmlns:viewModels="clr-namespace:S28Maker.ViewModels;assembly=S28Maker"
                x:Class="S28Maker.Views.MonthCarouselPage"
                CurrentPageChanged="MonthCarouselPage_OnCurrentPageChanged"
-               SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+               >
     <CarouselPage.BindingContext>
         <viewModels:MonthCarouselViewModel></viewModels:MonthCarouselViewModel>
     </CarouselPage.BindingContext>
