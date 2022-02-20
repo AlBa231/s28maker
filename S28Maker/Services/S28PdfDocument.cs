@@ -58,9 +58,15 @@ namespace S28Maker.Services
 
         private void LoadAndParse()
         {
+            RemoveTempFile();
             pdfDocument = new PdfDocument(new PdfReader(FileName), new PdfWriter(NewFileName));
             Parse();
             AcroForm = PdfAcroForm.GetAcroForm(pdfDocument, false);
+        }
+
+        private void RemoveTempFile()
+        {
+            File.Delete(NewFileName);
         }
 
         private void Parse()
