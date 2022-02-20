@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using S28Maker.Services;
+﻿using S28Maker.Services;
 using Xamarin.Forms;
 
 namespace S28Maker.Views
@@ -20,12 +16,31 @@ namespace S28Maker.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (S28PdfDocument.Current != null)
+            
+            if (TryLoadLoadPdfDocument())
+                NavigateToMonthCarousel();
+            else
+                NavigateToOpenS28View();
+        }
+
+        private static bool TryLoadLoadPdfDocument()
+        {
+            var localPdfDocument = S28PdfDocument.TryLoadLocalPdfDocument();
+            if (localPdfDocument != null)
             {
-                Shell.Current.GoToAsync("//" + nameof(MonthCarouselPage));
+                S28Document.Current = localPdfDocument;
             }
-            else 
-                Shell.Current.GoToAsync("//" + nameof(OpenS28));
+            return localPdfDocument != null;
+        }
+
+        private static void NavigateToMonthCarousel()
+        {
+            Shell.Current.GoToAsync("//" + nameof(MonthCarouselPage)).ConfigureAwait(false);
+        }
+
+        private static void NavigateToOpenS28View()
+        {
+            Shell.Current.GoToAsync("//" + nameof(OpenS28)).ConfigureAwait(false);
         }
     }
 }
